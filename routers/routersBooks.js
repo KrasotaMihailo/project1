@@ -16,7 +16,7 @@ router.get("/", (req, res) => { //Обработка GET запроса
 
 router.get("/:id", (req, res) => {
 
-  booksID = dataBooks.filter(elem => {
+  let booksID = dataBooks.filter(elem => {
     return elem.authorId == req.params.id
   })
 
