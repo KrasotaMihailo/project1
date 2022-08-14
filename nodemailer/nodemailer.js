@@ -8,17 +8,17 @@ const nodemailer = require('nodemailer');
 //     'secure': false,
 //     'auth': {
 //       'user': 'account', // логин моего почтового аккаунта
-//       'pass': 'password', // пароьл моего почтового аккаунта
+//       'pass': 'password', // пароль моего почтового аккаунта
 //     },
 //   });
 
 
 // БОЛЕЕ КОРОТКАЯ ФОРМА НАСТРОЙКИ ПОЧТОВОГО СЕРВЕРА
 let transporter = nodemailer.createTransport({
-    // 'service': 'gmail',
+    'service': 'gmail',
     'auth': {
-      'user': 'youremail@address.com',
-      'pass': 'yourpassword',
+      'user': 'fbtcntu@gmail.com', // логин моего почтового аккаунта
+      'pass': 'ltrfyfn2019', // пароль моего почтового аккаунта
     },
   });
 

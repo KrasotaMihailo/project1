@@ -9,9 +9,9 @@ let mas = [{
     mail: ["3@ukr.net", "4@ukr.net"]
   },
   {
-    ID: 132,
+    ID: 135,
     name: "petia",
-    mail: ["5@ukr.net, 3@ukr.net"]
+    mail: ["krasotamv@ukr.net"]
   }]
 
   module.exports=mas
