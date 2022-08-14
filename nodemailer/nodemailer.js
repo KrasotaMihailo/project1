@@ -15,10 +15,10 @@ const nodemailer = require('nodemailer');
 
 // БОЛЕЕ КОРОТКАЯ ФОРМА НАСТРОЙКИ ПОЧТОВОГО СЕРВЕРА
 let transporter = nodemailer.createTransport({
-    'service': 'gmail',
+    'service': 'Gmail',
     'auth': {
-      'user': 'fbtcntu@gmail.com', // логин моего почтового аккаунта
-      'pass': 'ltrfyfn2019', // пароль моего почтового аккаунта
+      'user': '&&&&&&&&', // логин моего почтового аккаунта
+      'pass': '9999999999', // пароль моего почтового аккаунта
     },
   });
 

@@ -44,15 +44,15 @@ router.post("/", (req, res) => {
   })
 
   let message = {
-    from: "fbtcntu@gmail.com", //адрес почтового ящика с которого будем отправлять подписчикам сообщение 
+    from: "krasota_stud2@ukr.net", //адрес почтового ящика с которого будем отправлять подписчикам сообщение 
     to: author.mail.join(", "),//адреса подписчиков, на который будет высылаться сообщение
     subject: "Новая книга", //указывается тема письма
-text: `У автора ${author.name} появилась новая книга  ${req.query.title}` //текст письма
+    text: `У автора ${author.name} появилась новая книга  ${req.query.title}` //текст письма
 
   }
   mailer(message)
 
-  res.send(`У автора ${author.name} появилась новая книга  ${req.query.title}`)
+  res.send(objBooks)
 
 })
 

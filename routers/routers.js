@@ -48,13 +48,15 @@ router.post("/", (req, res) => { // обработка POST запроса
 })
 
 router.post("/:id/subscribe", (req, res) => {
-  let objPerson = {} //создаем юзера
-  objPerson.ID = req.params.id //добавляем ID юзера
-  objPerson.mail=[]
-  objPerson.mail.push(req.query.email)//добавляем почты подписчиков
-  
-  mas.push(objPerson)//добавляем в объект с пользователями в базу юзер
-  res.send(objPerson)
+  let m = mas.find(elem => { return elem.ID == req.params.id })
+  if (m == undefined) {
+    return res.send(`Пользователя с id ${req.params.id} не существует`)
+  } else { 
+    
+   m.mail.push(req.query.email)//добавляем почты подписчиков
+   
+  res.send(m)
+  }
 })
 
 // PATCH запрос
