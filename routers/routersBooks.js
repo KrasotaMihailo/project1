@@ -25,9 +25,9 @@ router.get("/:id/", (req, res) => {
 
 //POST запрос
 router.post("/", (req, res) => {
-  let m = mas.find(elem => { return elem.ID == req.query.authorId })
+  let m = mas.find(elem => { return elem.token == req.headers.authorization })
   if (m == undefined) {
-    return res.send(`Пользователя с id ${req.query.authorId} не существует`)
+    return res.send(`Пользователя не существует`)
   }
   if (req.query.rating < 0 || req.query.rating > 10) {
     return res.send(`Rating должен быть от 0 до 10`)

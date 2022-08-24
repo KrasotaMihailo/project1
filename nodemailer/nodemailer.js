@@ -1,18 +1,6 @@
 const nodemailer = require('nodemailer');
 
 
-//НАСТРОЙКА ПОЧТОВОГО СЕРВЕРА
-// let transporter = nodemailer.createTransport({
-//     'host': 'smtp.ethereal.email',
-//     'port': 587, // порт с которого будут отправляться емейл
-//     'secure': false,
-//     'auth': {
-//       'user': 'account', // логин моего почтового аккаунта
-//       'pass': 'password', // пароль моего почтового аккаунта
-//     },
-//   });
-
-
 // БОЛЕЕ КОРОТКАЯ ФОРМА НАСТРОЙКИ ПОЧТОВОГО СЕРВЕРА
 let transporter = nodemailer.createTransport({
     'service': 'Gmail',
