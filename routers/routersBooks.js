@@ -35,7 +35,7 @@ router.post("/", (req, res) => {
   let objBooks = {} //создаем пустой объект
   objBooks.title = req.query.title//присваиваем значение, которое пришло в квери параметрах 
   objBooks.description = req.query.description
-  objBooks.authorId = req.query.authorId
+  objBooks.authorId = m.ID
   objBooks.rating = req.query.rating
   dataBooks.push(objBooks)//добавляем в объект с пользователями
   let author = mas.find(elem => {

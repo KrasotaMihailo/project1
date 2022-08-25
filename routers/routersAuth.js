@@ -1,11 +1,8 @@
 const express = require(`express`)
 const routerAuth = express.Router()// определяем Router
 
-
-
-
 let mas = require(`./../database/users.js`) // Экспортируем массив mas из файла users
-
+let token=require(`./../utils/generate-token.js`)//экспортируем функцию токен
 
 
 //POST запросы
@@ -30,29 +27,15 @@ routerAuth.post("/sign-up", (req, res) => { // обработка POST запр�
 
 routerAuth.post("/sign-in", (req, res) => { // ищем пользователя с указанными полями
 
-  let n = mas.find(elem => { return elem.mailauthor == req.query.email })
+  let n = mas.find(elem => { return elem.mailauthor == req.query.email&&elem.password == req.query.password})
   if (n == undefined) {
     return res.send(`неверный логин или пароль`)
   }
-  
-  let k = mas.find(elem => { return elem.password == req.query.password })
-  if (k == undefined) {
-    return res.send(`неверный логин или пароль`)
-  } 
-
-  function token(sumString) {
-    const symbolArr = "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
-    var randomString = "";
-    for (let i = 0; i < sumString; i++) {
-      var index = Math.floor(Math.random() * symbolArr.length);
-      randomString += symbolArr[index];
-    }
-    return randomString;
-  }
+   
     tokenValues=token(8)
-  k.token=tokenValues//добавляем токен пользователю
+  n.token=tokenValues//добавляем токен пользователю
 
-  console.log(k)
+  console.log(n)
   res.send(tokenValues)
 })
 
