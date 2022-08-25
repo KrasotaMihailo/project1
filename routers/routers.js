@@ -38,14 +38,7 @@ router.get("/:id/rating", (req, res) => { //Обработка GET запрос�
 
 
 //POST запросы
-router.post("/", (req, res) => { // обработка POST запроса
-  let objPerson = {} //создаем юзера
-  let IDkey = Math.round(Math.random() * 1000)
-  objPerson.ID = IDkey
-  mas.push(objPerson)//добавляем в объект с пользователями
-  objPerson.name = req.query.name//присваиваем имя пользователя, которое пришло в квери параметрах 
-  res.send(objPerson)
-})
+
 
 router.post("/:id/subscribe", (req, res) => {
   let m = mas.find(elem => { return elem.ID == req.params.id })

@@ -25,9 +25,9 @@ router.get("/:id/", (req, res) => {
 
 //POST запрос
 router.post("/", (req, res) => {
-  let m = mas.find(elem => { return elem.ID == req.query.authorId })
+  let m = mas.find(elem => { return elem.token == req.headers.authorization })
   if (m == undefined) {
-    return res.send(`Пользователя с id ${req.query.authorId} не существует`)
+    return res.send(`Пользователя не существует`)
   }
   if (req.query.rating < 0 || req.query.rating > 10) {
     return res.send(`Rating должен быть от 0 до 10`)
@@ -35,7 +35,7 @@ router.post("/", (req, res) => {
   let objBooks = {} //создаем пустой объект
   objBooks.title = req.query.title//присваиваем значение, которое пришло в квери параметрах 
   objBooks.description = req.query.description
-  objBooks.authorId = req.query.authorId
+  objBooks.authorId = m.ID
   objBooks.rating = req.query.rating
   dataBooks.push(objBooks)//добавляем в объект с пользователями
   let author = mas.find(elem => {
