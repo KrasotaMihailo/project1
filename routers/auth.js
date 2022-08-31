@@ -1,8 +1,8 @@
 const express = require(`express`)
 const routerAuth = express.Router()// определяем Router
 
-let mas = require(`./../database/users.js`) // Экспортируем массив mas из файла users
-let token=require(`./../utils/generate-token.js`)//экспортируем функцию токен
+let mas = require(`../database/users.js`) // Экспортируем массив mas из файла users
+let token=require(`../utils/generate-token.js`)//экспортируем функцию токен
 
 
 //POST запросы

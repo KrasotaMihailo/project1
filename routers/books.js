@@ -2,8 +2,8 @@ const express = require(`express`)
 const router = express.Router()// определяем Router
 
 let dataBooks = require(`../database/books.js`) // Экспортируем массив dataBooks из файла books
-let mas = require(`./../database/users.js`) // Экспортируем массив mas из файла users
-let mailer = require(`./../nodemailer/nodemailer.js`) //подключаем модуль nodemailer и указываем путь файла, в который он записан 
+let mas = require(`../database/users.js`) // Экспортируем массив mas из файла users
+let mailer = require(`../nodemailer/nodemailer.js`) //подключаем модуль nodemailer и указываем путь файла, в который он записан 
 
 
 // определяем маршруты и их обработчики внутри роутера
