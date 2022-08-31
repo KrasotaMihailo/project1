@@ -1,11 +1,11 @@
 const express = require(`express`)
 const router = express.Router()// определяем Router
-const authorization = require(`./../middlewares/authorization.js`)// импортируем мидлвейр авторизацию 
+const authorization = require(`../middlewares/authorization.js`)// импортируем мидлвейр авторизацию 
 
 router.use(authorization)
 
-let mas = require(`./../database/users.js`) // Экспортируем массив mas из файла users
-let dataBooks = require(`./../database/books.js`) // Экспортируем массив dataBooks из файла books
+let mas = require(`../database/users.js`) // Экспортируем массив mas из файла users
+let dataBooks = require(`../database/books.js`) // Экспортируем массив dataBooks из файла books
 
 // определяем маршруты и их обработчики внутри роутера
 
