@@ -1,60 +1,56 @@
 const express = require(`express`)
-const router = express.Router()// определяем Router
+const routerBooks = express.Router()// определяем Router
+const SchemaBooks = require("../schemes/schemaBooks") // импортируем схему schemAuth
+const SchemaAuth = require("../schemes/schemaAuth") // импортируем схему schemAuth
 
-let dataBooks = require(`../database/books.js`) // Экспортируем массив dataBooks из файла books
-let mas = require(`../database/users.js`) // Экспортируем массив mas из файла users
 let mailer = require(`../nodemailer/nodemailer.js`) //подключаем модуль nodemailer и указываем путь файла, в который он записан 
+
 
 
 // определяем маршруты и их обработчики внутри роутера
 
-
 //GET запрос
-router.get("/", (req, res) => { //Обработка GET запроса
+routerBooks.get("/", async (req, res) => { //Обработка GET запроса
+  const dataBooks=await SchemaBooks.find ({})
   res.send(dataBooks)
 })
 
-router.get("/:id/", (req, res) => {
 
-  let booksID = dataBooks.filter(elem => {
-    return elem.authorId == req.params.id
-  })
-
+routerBooks.get("/:id/", async (req, res) => {
+  const booksID =await SchemaBooks.find({authorId: req.params.id})
   res.send(booksID)
 })
 
 //POST запрос
-router.post("/", (req, res) => {
-  let m = mas.find(elem => { return elem.token == req.headers.authorization })
+routerBooks.post("/", async (req, res) => { //создает книгу, с полями
+  const objBooks=new SchemaBooks ({
+    title: req.query.title, //присваиваем значение, которое пришло в квери параметрах 
+    description: req.query.description,
+    authorId: req.headers.authorization,
+    rating: req.query.rating
+  })
+  
+  const m = await SchemaAuth.findOne ({token: req.headers.authorization })
   if (m == undefined) {
     return res.send(`Пользователя не существует`)
   }
   if (req.query.rating < 0 || req.query.rating > 10) {
     return res.send(`Rating должен быть от 0 до 10`)
   }
-  let objBooks = {} //создаем пустой объект
-  objBooks.title = req.query.title//присваиваем значение, которое пришло в квери параметрах 
-  objBooks.description = req.query.description
-  objBooks.authorId = m.ID
-  objBooks.rating = req.query.rating
-  dataBooks.push(objBooks)//добавляем в объект с пользователями
-  let author = mas.find(elem => {
-    if (elem.ID == req.query.authorId) // ищем автора по ID
-    { return elem.mail }        //возвращаем почты подписчиков автора
-  })
-
-  let message = {
+     
+    let message = {
     from: "krasota_stud2@ukr.net", //адрес почтового ящика с которого будем отправлять подписчикам сообщение 
-    to: author.mail.join(", "),//адреса подписчиков, на который будет высылаться сообщение
+    to: SchemaAuth.mail,//адреса подписчиков, на который будет высылаться сообщение
     subject: "Новая книга", //указывается тема письма
-    text: `У автора ${author.name} появилась новая книга  ${req.query.title}` //текст письма
+    text: `У автора ${SchemaAuth.name} появилась новая книга  ${req.query.title}` //текст письма
 
   }
   mailer(message)
-
+console.log (SchemaAuth.mail)
+  await objBooks.save()// Сохранение данных
   res.send(objBooks)
 
 })
 
 
-module.exports = router// указываем, что содержимое файла экспортируется, чтобы его можно было подключить и использовать 
+module.exports = routerBooks// указываем, что содержимое файла экспортируется, чтобы его можно было подключить и использовать 
