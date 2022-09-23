@@ -1,7 +1,7 @@
 const express = require(`express`)
 const routerBooks = express.Router()// определяем Router
-const SchemaBooks = require("../schemes/schemaBooks") // импортируем схему schemAuth
-const SchemaAuth = require("../schemes/schemaAuth") // импортируем схему schemAuth
+const SchemaBooks = require("../schemes/schemaBooks.js") // импортируем схему schemAuth
+const SchemaAuth = require("../schemes/schemaAuth.js") // импортируем схему schemAuth
 
 let mailer = require(`../nodemailer/nodemailer.js`) //подключаем модуль nodemailer и указываем путь файла, в который он записан 
 
@@ -46,7 +46,6 @@ routerBooks.post("/", async (req, res) => { //создает книгу, с по
 
   }
   mailer(message)
-console.log (SchemaAuth.mail)
   await objBooks.save()// Сохранение данных
   res.send(objBooks)
 

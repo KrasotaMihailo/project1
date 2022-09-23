@@ -1,6 +1,6 @@
 const express = require(`express`)
 const routerAuth = express.Router()// определяем Router
-const SchemaAuth = require("../schemes/schemaAuth") // импортируем схему schemAuth
+const SchemaAuth = require("../schemes/schemaAuth.js") // импортируем схему schemAuth
 
 let token = require(`../utils/generate-token.js`)//экспортируем функцию токен
 
@@ -16,15 +16,12 @@ routerAuth.post("/sign-up", async (req, res) => { // обработка POST з�
     token: token(8)
   })
   let n = await SchemaAuth.findOne({ mailauthor: req.query.email })
-  console.log(n)
   if (n) {
     return res.send(`Автор книги с e-mail ${req.query.email} уже существует`)
   }
-
   if (req.query.password.length < 6) {
     return res.send(`Пароль должен содержать не менее 6 символов`)
   }
-
   await objPerson.save()// Сохранение данных
   res.send(objPerson)
 })
@@ -32,30 +29,23 @@ routerAuth.post("/sign-up", async (req, res) => { // обработка POST з�
 
 
 routerAuth.post("/sign-in", async (req, res) => { // ищем пользователя с указанными полями
-  let n = await SchemaAuth.findOne({ mailauthor: req.query.email })
+  let n = await SchemaAuth.findOne ({ mailauthor: req.query.email, password: req.query.password }) 
   if (n == undefined) {
-    return res.send(`неверный логин`)
+    return res.send(`неверный логин или пароль`)
   }
-  let m = await SchemaAuth.findOne({ password: req.query.password })
-  if (m == undefined) {
-    return res.send(`неверный пароль`)}
-
-    const objPerson = new SchemaAuth({  
+    const objPerson = new SchemaAuth({
     token: token(8)
-    })
-    
-    console.log(objPerson)
-    await objPerson.save()// Сохранение данных
-    res.send(objPerson.token)
   })
+  await objPerson.save()// Сохранение данных
+  res.send(objPerson.token)
+})
 
 
 routerAuth.post("/logout", async (req, res) => { // ищем пользователя с указанными полями
-  n = await SchemaAuth.findOne({token: req.headers.authorization})
+  n = await SchemaAuth.findOne({ token: req.headers.authorization })
   if (n == undefined) {
     return res.send(`Нет пользователя с таким токеном`)
   }
-
   n.token = null//удаляем токен пользователю
   await n.save()// Сохранение данных
   res.send(n)
