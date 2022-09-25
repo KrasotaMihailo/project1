@@ -38,11 +38,12 @@ routerBooks.post("/", async (req, res) => { //создает книгу, с по
     return res.send(`Rating должен быть от 0 до 10`)
   }
      
+
     let message = {
     from: "krasota_stud2@ukr.net", //адрес почтового ящика с которого будем отправлять подписчикам сообщение 
-    to: SchemaAuth.mail,//адреса подписчиков, на который будет высылаться сообщение
+    to: m.mail.join(", "),//адреса подписчиков, на который будет высылаться сообщение
     subject: "Новая книга", //указывается тема письма
-    text: `У автора ${SchemaAuth.name} появилась новая книга  ${req.query.title}` //текст письма
+    text: `У автора ${m.name} появилась новая книга  ${req.query.title}` //текст письма
 
   }
   mailer(message)

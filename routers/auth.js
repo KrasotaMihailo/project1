@@ -13,8 +13,7 @@ routerAuth.post("/sign-up", async (req, res) => { // обработка POST з�
     mail: [],
     mailauthor: req.query.email,
     password: req.query.password,
-    token: token(8)
-  })
+      })
   let n = await SchemaAuth.findOne({ mailauthor: req.query.email })
   if (n) {
     return res.send(`Автор книги с e-mail ${req.query.email} уже существует`)
