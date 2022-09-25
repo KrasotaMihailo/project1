@@ -13,7 +13,7 @@ routerAuth.post("/sign-up", async (req, res) => { // обработка POST з�
     mail: [],
     mailauthor: req.query.email,
     password: req.query.password,
-      })
+  })
   let n = await SchemaAuth.findOne({ mailauthor: req.query.email })
   if (n) {
     return res.send(`Автор книги с e-mail ${req.query.email} уже существует`)
@@ -28,15 +28,13 @@ routerAuth.post("/sign-up", async (req, res) => { // обработка POST з�
 
 
 routerAuth.post("/sign-in", async (req, res) => { // ищем пользователя с указанными полями
-  let n = await SchemaAuth.findOne ({ mailauthor: req.query.email, password: req.query.password }) 
+  let n = await SchemaAuth.findOne({ mailauthor: req.query.email, password: req.query.password })
   if (n == undefined) {
     return res.send(`неверный логин или пароль`)
   }
-    const objPerson = new SchemaAuth({
-    token: token(8)
-  })
-  await objPerson.save()// Сохранение данных
-  res.send(objPerson.token)
+      n.token= token(8)
+    await n.save()// Сохранение данных
+  res.send(n.token)
 })
 
 
