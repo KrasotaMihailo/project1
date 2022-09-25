@@ -1,53 +1,50 @@
 const express = require(`express`)
 const routerAuth = express.Router()// определяем Router
+const SchemaAuth = require("../schemes/schemaAuth.js") // импортируем схему schemAuth
 
-let mas = require(`../database/users.js`) // Экспортируем массив mas из файла users
-let token=require(`../utils/generate-token.js`)//экспортируем функцию токен
+let token = require(`../utils/generate-token.js`)//экспортируем функцию токен
 
 
 //POST запросы
-routerAuth.post("/sign-up", (req, res) => { // обработка POST запроса, создает пользователя с указанными полями 
-  let objPerson = {} //создаем юзера
-  let IDkey = Math.round(Math.random() * 1000)
-  objPerson.ID = IDkey
-  objPerson.mail = []// поле для емейлов подписчиков
-  objPerson.mailauthor = req.query.email
-  let n = mas.find(elem => { return elem.mailauthor == req.query.email })
-  if (n !== undefined) {
+routerAuth.post("/sign-up", async (req, res) => { // обработка POST запроса, создает пользователя с указанными полями 
+  const objPerson = new SchemaAuth({
+    ID: Math.round(Math.random() * 1000),
+    name: req.query.name,
+    mail: [],
+    mailauthor: req.query.email,
+    password: req.query.password,
+  })
+  let n = await SchemaAuth.findOne({ mailauthor: req.query.email })
+  if (n) {
     return res.send(`Автор книги с e-mail ${req.query.email} уже существует`)
   }
-  objPerson.name = req.query.name//присваиваем имя пользователя, которое пришло в квери параметрах 
-  objPerson.password = req.query.password
   if (req.query.password.length < 6) {
     return res.send(`Пароль должен содержать не менее 6 символов`)
   }
-  mas.push(objPerson)//добавляем в объект с пользователями
+  await objPerson.save()// Сохранение данных
   res.send(objPerson)
 })
 
-routerAuth.post("/sign-in", (req, res) => { // ищем пользователя с указанными полями
 
-  let n = mas.find(elem => { return elem.mailauthor == req.query.email&&elem.password == req.query.password})
+
+routerAuth.post("/sign-in", async (req, res) => { // ищем пользователя с указанными полями
+  let n = await SchemaAuth.findOne({ mailauthor: req.query.email, password: req.query.password })
   if (n == undefined) {
     return res.send(`неверный логин или пароль`)
   }
-   
-    tokenValues=token(8)
-  n.token=tokenValues//добавляем токен пользователю
-
-  console.log(n)
-  res.send(tokenValues)
+      n.token= token(8)
+    await n.save()// Сохранение данных
+  res.send(n.token)
 })
 
-routerAuth.post("/logout", (req, res) => { // ищем пользователя с указанными полями
 
-  let n = mas.find(elem => { return elem.token == req.headers.authorization})
+routerAuth.post("/logout", async (req, res) => { // ищем пользователя с указанными полями
+  n = await SchemaAuth.findOne({ token: req.headers.authorization })
   if (n == undefined) {
     return res.send(`Нет пользователя с таким токеном`)
   }
-      
-  n.token=null//удаляем токен пользователю
-  
+  n.token = null//удаляем токен пользователю
+  await n.save()// Сохранение данных
   res.send(n)
 })
 
