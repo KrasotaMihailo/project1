@@ -1,55 +1,55 @@
-const express = require(`express`)
-const routerAuth = express.Router()// определяем Router
-const SchemaAuth = require("../schemes/schemaAuth.js") // импортируем схему schemAuth
+const express = require('express');
 
-let token = require(`../utils/generate-token.js`)//экспортируем функцию токен
+const routerAuth = express.Router();// определяем Router
+const bodyParser = require('body-parser');
+const SchemaAuth = require('../schemes/schemaAuth'); // импортируем схему schemAuth
 
+const token = require('../utils/generate-token');// экспортируем функцию токен
 
-//POST запросы
-routerAuth.post("/sign-up", async (req, res) => { // обработка POST запроса, создает пользователя с указанными полями 
+routerAuth.use(bodyParser.json());
+routerAuth.use(bodyParser.urlencoded({ extended: true }));
+
+// POST запросы
+routerAuth.post('/sign-up', async (req, res) => { // регистрация
   const objPerson = new SchemaAuth({
     ID: Math.round(Math.random() * 1000),
-    name: req.query.name,
+    name: req.body.name,
     mail: [],
-    mailauthor: req.query.email,
-    password: req.query.password,
-  })
-  let n = await SchemaAuth.findOne({ mailauthor: req.query.email })
+    mailauthor: req.body.email,
+    password: req.body.password
+  });
+  const n = await SchemaAuth.findOne({ mailauthor: req.body.email });
+
   if (n) {
-    return res.send(`Автор книги с e-mail ${req.query.email} уже существует`)
+    return res.send(`Автор книги с e-mail ${req.body.email} уже существует`);
   }
-  if (req.query.password.length < 6) {
-    return res.send(`Пароль должен содержать не менее 6 символов`)
+  if (req.body.password.length < 6) {
+    return res.send('Пароль должен содержать не менее 6 символов');
   }
-  await objPerson.save()// Сохранение данных
-  res.send(objPerson)
-})
+  await objPerson.save();// Сохранение данных
+  res.send(objPerson);
+});
 
-
-
-routerAuth.post("/sign-in", async (req, res) => { // ищем пользователя с указанными полями
-  let n = await SchemaAuth.findOne({ mailauthor: req.query.email, password: req.query.password })
-  if (n == undefined) {
-    return res.send(`неверный логин или пароль`)
+routerAuth.post('/sign-in', async (req, res) => { // авторизация
+  const user = await SchemaAuth.findOne({ mailauthor: req.body.email, password: req.body.password });
+  
+  if (!user) {
+    return res.send('неверный логин или пароль');
   }
-      n.token= token(8)
-    await n.save()// Сохранение данных
-  res.send(n.token)
-})
+  user.token = token(8);
+  await user.save();// Сохранение данных
+  res.send(user.token);
+});
 
-
-routerAuth.post("/logout", async (req, res) => { // ищем пользователя с указанными полями
-  n = await SchemaAuth.findOne({ token: req.headers.authorization })
-  if (n == undefined) {
-    return res.send(`Нет пользователя с таким токеном`)
+routerAuth.post('/logout', async (req, res) => { // разавторизация
+  const n = await SchemaAuth.findOne({ token: req.headers.authorization });
+  
+  if (!n) {
+    return res.send('Нет пользователя с таким токеном');
   }
-  n.token = null//удаляем токен пользователю
-  await n.save()// Сохранение данных
-  res.send(n)
-})
+  n.token = null;// удаляем токен пользователю
+  await n.save();// Сохранение данных
+  res.send(n);
+});
 
-
-
-
-module.exports = routerAuth// указываем, что содержимое файла экспортируется, чтобы его можно было подключить и использовать 
-
+module.exports = routerAuth;// указываем, что содержимое файла экспортируется, чтобы его можно было подключить и использовать
