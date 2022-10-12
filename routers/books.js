@@ -31,9 +31,7 @@ routerBooks.post('/', async (req, res) => { // создает книгу, с п�
   const { error } = validationSchema5.validate(req.body);
 
   if (error) {
-    console.log(error);
-      
-    return res.status(400).json({ message: 'error' });
+    return res.status(400).json({ message: error.details });
   }
   
   const objBooks = new SchemaBooks({

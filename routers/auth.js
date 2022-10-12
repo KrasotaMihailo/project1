@@ -17,9 +17,7 @@ routerAuth.post('/sign-up', async (req, res) => { // регистрация
   const { error } = validationSchema.validate(req.body);
 
   if (error) {
-    console.log(error);
-      
-    return res.status(400).json({ message: 'error' });
+    return res.status(400).json({ message: error.details });
   }
 
   const objPerson = new SchemaAuth({
@@ -43,9 +41,7 @@ routerAuth.post('/sign-in', async (req, res) => { // авторизация
   const { error } = validationSchema1.validate(req.body);
 
   if (error) {
-    console.log(error);
-      
-    return res.status(400).json({ message: 'error' });
+    return res.status(400).json({ message: error.details });
   }  
   const user = await SchemaAuth.findOne({ mailauthor: req.body.email, password: req.body.password });
   

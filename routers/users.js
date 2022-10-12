@@ -31,9 +31,7 @@ router.post('/:id/subscribe', async (req, res) => { // добавляет пол
   const { error } = validationSchema2.validate(req.body);
 
   if (error) {
-    console.log(error);
-      
-    return res.status(400).json({ message: 'error' });
+    return res.status(400).json({ message: error.details });
   }
  
   const m = await SchemaAuth.findOne({ ID: req.params.id });
@@ -51,9 +49,7 @@ router.patch('/', async (req, res) => { // обработка PATCH запрос
   const { error } = validationSchema3.validate(req.body);
 
   if (error) {
-    console.log(error);
-      
-    return res.status(400).json({ message: 'error' });
+    return res.status(400).json({ message: error.details });
   }
   
   const objPerson = await SchemaAuth.findOne({ ID: req.params.id });
@@ -68,9 +64,7 @@ router.delete('/', async (req, res) => { // обработка DELETE запро
   const { error } = validationSchema4.validate(req.body);
   
   if (error) {
-    console.log(error);
-      
-    return res.status(400).json({ message: 'error' });
+    return res.status(400).json({ message: error.details });
   }
   const objPerson = await SchemaAuth.deleteOne({ ID: req.body.id });
 
