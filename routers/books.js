@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const routerBooks = express.Router();// определяем Router
 const SchemaBooks = require('../schemes/schemaBooks'); // импортируем схему schemAuth
 const SchemaAuth = require('../schemes/schemaAuth'); // импортируем схему schemAuth
+const validationSchema5 = require('../validations/valid5');
 
 routerBooks.use(bodyParser.json());
 routerBooks.use(bodyParser.urlencoded({ extended: true }));
@@ -27,6 +28,12 @@ routerBooks.get('/:id/', async (req, res) => {
 
 // POST запрос
 routerBooks.post('/', async (req, res) => { // создает книгу, с полями
+  const { error } = validationSchema5.validate(req.body);
+
+  if (error) {
+    return res.status(400).json({ message: error.details });
+  }
+  
   const objBooks = new SchemaBooks({
     title: req.body.title, // присваиваем значение, которое пришло в боди параметрах
     description: req.body.description,
