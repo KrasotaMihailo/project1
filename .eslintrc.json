@@ -21,6 +21,7 @@
     "comma-dangle": ["error", { "functions": "ignore" }],
     "max-len": ["error", { "code": 150 }],
     "no-trailing-spaces": 0,
-    "newline-before-return": "error"
-    }
+    "newline-before-return": "error",
+    "linebreak-style": 0    
+}
 }

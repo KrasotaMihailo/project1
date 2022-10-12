@@ -5,6 +5,9 @@ const router = express.Router();// определяем Router
 const authorization = require('../middlewares/authorization');// импортируем мидлвейр авторизацию
 const SchemaAuth = require('../schemes/schemaAuth'); // импортируем схему schemAuth
 const SchemaBooks = require('../schemes/schemaBooks'); // импортируем схему schemAuth
+const validationSchema2 = require('../validations/valid2');
+const validationSchema3 = require('../validations/valid3');
+const validationSchema4 = require('../validations/valid4');
 
 router.use(authorization);
 
@@ -25,6 +28,14 @@ router.get('/:id/rating', async (req, res) => { // Обработка GET зап
 // POST запросы
 
 router.post('/:id/subscribe', async (req, res) => { // добавляет пользователю с id параметром, подписчика с email
+  const { error } = validationSchema2.validate(req.body);
+
+  if (error) {
+    console.log(error);
+      
+    return res.status(400).json({ message: 'error' });
+  }
+ 
   const m = await SchemaAuth.findOne({ ID: req.params.id });
 
   if (!m) {
@@ -37,6 +48,14 @@ router.post('/:id/subscribe', async (req, res) => { // добавляет пол
 
 // PATCH запрос
 router.patch('/', async (req, res) => { // обработка PATCH запроса
+  const { error } = validationSchema3.validate(req.body);
+
+  if (error) {
+    console.log(error);
+      
+    return res.status(400).json({ message: 'error' });
+  }
+  
   const objPerson = await SchemaAuth.findOne({ ID: req.params.id });
 
   objPerson.name = req.body.name;
@@ -46,6 +65,13 @@ router.patch('/', async (req, res) => { // обработка PATCH запрос
 
 // DELETE запрос
 router.delete('/', async (req, res) => { // обработка DELETE запроса,
+  const { error } = validationSchema4.validate(req.body);
+  
+  if (error) {
+    console.log(error);
+      
+    return res.status(400).json({ message: 'error' });
+  }
   const objPerson = await SchemaAuth.deleteOne({ ID: req.body.id });
 
   res.send(objPerson);
